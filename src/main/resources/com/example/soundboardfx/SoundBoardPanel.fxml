@@ -2,8 +2,9 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" style="-fx-background-color: linear-gradient(to top, #FFD700, #FFA500);" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.soundboardfx.HelloController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.soundboardfx.HelloController">
    <children>
       <VBox prefHeight="720.0" prefWidth="1280.0">
          <children>
@@ -23,13 +24,23 @@
             </MenuBar>
             <HBox prefHeight="739.0" prefWidth="1280.0">
                <children>
-                  <Pane prefHeight="695.0" prefWidth="640.0">
+                  <Pane prefHeight="695.0" prefWidth="640.0" style="-fx-background-color: linear-gradient(to bottom right, #FFD700, #FFA500); -fx-border-color: black;">
                      <children>
-                        <Button fx:id="submitSoundPackButton" layoutX="238.0" layoutY="635.0" mnemonicParsing="false" onAction="#submitNewSoundPack" prefHeight="46.0" prefWidth="164.0" text="Submit Sound" />
+                        <Button fx:id="submitSoundPackButton" layoutX="238.0" layoutY="635.0" mnemonicParsing="false" onAction="#submitNewSoundPack" prefHeight="46.0" prefWidth="176.0" style="-fx-font-size: 20; -fx-border-color: black; -fx-background-color: white; -fx-font-family: monospace;" text="Submit Sound" />
+                        <Label fx:id="soundBoardTitleLabel" layoutX="56.0" layoutY="14.0" prefHeight="139.0" prefWidth="401.0" style="-fx-padding: 6; -fx-effect: dropShadow(gaussian, grey, 2,2,2,2)" text="Sound Board" textAlignment="CENTER">
+                           <font>
+                              <Font name="Monospaced Regular" size="58.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="480.0" layoutY="13.0" prefHeight="87.0" prefWidth="146.0" text="❤" textFill="RED">
+                           <font>
+                              <Font size="96.0" />
+                           </font>
+                        </Label>
                      </children></Pane>
-                  <Pane prefHeight="695.0" prefWidth="640.0">
+                  <Pane prefHeight="695.0" prefWidth="640.0" style="-fx-background-color: linear-gradient(to bottom left, #FFD700, #FFA500); -fx-border-color: black;">
                      <children>
-                        <ListView fx:id="soundListView" layoutX="14.0" layoutY="14.0" onMouseClicked="#onSoundClicked" prefHeight="434.0" prefWidth="337.0" />
+                        <ListView fx:id="soundListView" layoutX="14.0" layoutY="14.0" onMouseClicked="#onSoundClicked" prefHeight="666.0" prefWidth="337.0" style="-fx-border-color: black; -fx-border-radius: 1;" />
                      </children></Pane>
                </children>
             </HBox>
