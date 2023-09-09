@@ -18,6 +18,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(PANEL_FILE));
         Scene scene = new Scene(fxmlLoader.load(), SCREEN_WIDTH, SCREEN_HEIGHT);
+        stage.setResizable(false);
         stage.setTitle(PANEL_TITLE);
         stage.setScene(scene);
         stage.show();
