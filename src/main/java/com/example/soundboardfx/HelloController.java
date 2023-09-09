@@ -44,7 +44,7 @@ public class HelloController
     protected void submitNewSoundPack()
     {
         Thread progressThread = new Thread(() -> {
-            while(true)
+            while(progress < 1.0)
             {
                 progress+=0.01;
                 recordProgressBar.setProgress(progress);
