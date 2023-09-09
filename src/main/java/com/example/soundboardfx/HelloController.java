@@ -34,19 +34,19 @@ public class HelloController
     private ListView<String> soundListView;
     @FXML
     private ObservableList<String> soundList;
-    private double progress = 0.0;
+    private double progress;
     public HelloController() {
         // Initialize the soundList
         soundList = FXCollections.observableArrayList();
+        progress = 0.0;
         //soundList.addAll();
     }
     @FXML
     protected void submitNewSoundPack()
     {
-        Thread progressThread = new Thread(() -> {
-            while(progress < 1.0)
-            {
-                progress+=0.01;
+        new Thread(() -> {
+            while (progress < 1.0) {
+                progress += 0.01;
                 recordProgressBar.setProgress(progress);
                 System.out.println("Progress: " + progress);
                 try {
