@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.annotation.Target;
 
+import javafx.application.Platform;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -20,7 +21,6 @@ public class SoundRecorder {
     private static final boolean SIGNED = true;
     private static final boolean BIG_EDIAN = true;
     private String name;
-    private long recordLength;
     private String filePath;
     private File wavFile;
 
@@ -49,23 +49,21 @@ public class SoundRecorder {
     public void setName(String name) {
         this.name = name;
     }
-
-    public long getRecordLength() {
-        return recordLength;
-    }
-
-    public void setRecordLength(long recordLength) {
-        this.recordLength = recordLength;
-    }
-
-    public File RecordSound() throws LineUnavailableException
+    public File recordSound() throws LineUnavailableException
     {
         return record(targetDataLine);
     }
-    private File record(TargetDataLine targetDataLine) throws LineUnavailableException {
+    private File record(TargetDataLine targetDataLine) {
 
-        targetDataLine.open();
-        targetDataLine.start();
+        Platform.runLater(() -> {
+            try {
+                targetDataLine.open();
+            } catch (LineUnavailableException e) {
+                throw new RuntimeException(e);
+            }
+            targetDataLine.start();
+        });
+
         System.out.println("Recording...");
 
         Thread stopper = new Thread(() -> {
@@ -81,16 +79,13 @@ public class SoundRecorder {
         });
 
         stopper.start();
-        try {
 
+        Platform.runLater(() -> {
             targetDataLine.stop();
             targetDataLine.close();
-            System.out.println("End");
-        }
+        });
 
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        System.out.println("End");
 
         return wavFile;
     }
