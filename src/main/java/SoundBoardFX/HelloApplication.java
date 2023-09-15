@@ -1,4 +1,4 @@
-package com.example.soundboardfx;
+package SoundBoardFX;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -13,7 +13,6 @@ public class HelloApplication extends Application {
     private static final int SCREEN_HEIGHT = 720;
     private static final String PANEL_FILE  = "SoundBoardPanel.fxml";
     private static final String PANEL_TITLE = "Sound Board <3 :)";
-
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(PANEL_FILE));

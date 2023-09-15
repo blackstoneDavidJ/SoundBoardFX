@@ -1,13 +1,13 @@
-package com.example.soundboardfx;
+package SoundBoardFX;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.application.Platform;
 
-public class HelloController
-{
+public class HelloController {
     @FXML
     private TextArea descriptionTextBox;
     @FXML
@@ -34,38 +34,54 @@ public class HelloController
     private ListView<String> soundListView;
     @FXML
     private ObservableList<String> soundList;
+
     private double progress;
+
     public HelloController() {
         // Initialize the soundList
         soundList = FXCollections.observableArrayList();
         progress = 0.0;
         //soundList.addAll();
     }
+
     @FXML
-    protected void submitNewSoundPack()
-    {
-        new Thread(() -> {
+    protected void submitNewSoundPack() {
+        Thread backgroundThread = new Thread(() -> {
             while (progress < 1.0) {
                 progress += 0.01;
-                recordProgressBar.setProgress(progress);
-                System.out.println("Progress: " + progress);
+
+                // Update the progress bar on the JavaFX Application thread
+                Platform.runLater(() -> {
+                    recordProgressBar.setProgress(progress);
+                    System.out.println("Progress: " + progress);
+                });
+
                 try {
+                    // Sleep for one second (1000 milliseconds)
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    e.printStackTrace();
                 }
             }
+
+            // Continue with the rest of your code
+            String author = creatorTextBox.getText();
+            String title = titleTextBox.getText();
+            String date = dateTextBox.getEditor().getText();
+            String description = descriptionTextBox.getText();
+            soundList.add(title);
+
+            // Update the ListView on the JavaFX Application thread
+            Platform.runLater(() -> {
+                soundListView.setItems(soundList);
+            });
         });
-        String author = creatorTextBox.getText();
-        String title = titleTextBox.getText();
-        String date = dateTextBox.getEditor().getText();
-        String description = descriptionTextBox.getText();
-        soundList.add(title);
-        soundListView.setItems(soundList); // Update the ListView
+
+        backgroundThread.start();
     }
 
-    public void onSoundClicked(MouseEvent mouseEvent)
-    {
+
+    public void onSoundClicked(MouseEvent mouseEvent) {
         System.out.println("Clicked on " + soundListView.getSelectionModel().getSelectedItem());
     }
 }

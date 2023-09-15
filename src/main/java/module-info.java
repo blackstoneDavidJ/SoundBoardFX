@@ -6,6 +6,6 @@ module com.example.soundboardfx {
     requires com.dlsc.formsfx;
     requires java.desktop;
 
-    opens com.example.soundboardfx to javafx.fxml;
-    exports com.example.soundboardfx;
+    opens SoundBoardFX to javafx.fxml;
+    exports SoundBoardFX;
 }

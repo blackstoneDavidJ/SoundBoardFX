@@ -2,6 +2,7 @@ package Recorder;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Target;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
@@ -12,13 +13,33 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.TargetDataLine;
 
 public class SoundRecorder {
-    private static String name;
-    private static long recordLength;
-    private static String filePath;
-    private static File wavFile;
 
-    public SoundRecorder(String filePath) {
-        SoundRecorder.filePath = filePath;
+    private static final int SAMPLE_RATE = 48000;
+    private static final int SAMPLE_SIZE_IN_BITS = 16;
+    private static final int CHANNELS = 2;
+    private static final boolean SIGNED = true;
+    private static final boolean BIG_EDIAN = true;
+    private String name;
+    private long recordLength;
+    private String filePath;
+    private File wavFile;
+
+    private final TargetDataLine targetDataLine;
+
+    public void stopRecording()
+    {
+        targetDataLine.stop();
+        targetDataLine.close();
+    }
+    public SoundRecorder(String filePath) throws LineUnavailableException {
+        this.filePath = filePath;
+        AudioFormat format = new AudioFormat(SAMPLE_RATE, SAMPLE_SIZE_IN_BITS, CHANNELS, SIGNED, BIG_EDIAN);
+        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+        if (!AudioSystem.isLineSupported(info)) {
+            System.out.println("Line not supported!");
+        }
+
+        this.targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
     }
 
     public String getName() {
@@ -26,7 +47,7 @@ public class SoundRecorder {
     }
 
     public void setName(String name) {
-        SoundRecorder.name = name;
+        this.name = name;
     }
 
     public long getRecordLength() {
@@ -34,20 +55,18 @@ public class SoundRecorder {
     }
 
     public void setRecordLength(long recordLength) {
-        SoundRecorder.recordLength = recordLength;
+        this.recordLength = recordLength;
     }
 
-    public File record() throws LineUnavailableException {
-        AudioFormat format = new AudioFormat(48000, 16, 2, true, true);
-        DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
-        if (!AudioSystem.isLineSupported(info)) {
-            System.out.println("Line not supported!");
-        }
+    public File RecordSound() throws LineUnavailableException
+    {
+        return record(targetDataLine);
+    }
+    private File record(TargetDataLine targetDataLine) throws LineUnavailableException {
 
-        TargetDataLine targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
         targetDataLine.open();
-        System.out.println("starting");
         targetDataLine.start();
+        System.out.println("Recording...");
 
         Thread stopper = new Thread(() -> {
             AudioInputStream audioStream = new AudioInputStream(targetDataLine);
@@ -63,7 +82,7 @@ public class SoundRecorder {
 
         stopper.start();
         try {
-            Thread.sleep(recordLength);
+
             targetDataLine.stop();
             targetDataLine.close();
             System.out.println("End");
