@@ -21,15 +21,18 @@ public class SoundRecorder {
     private static final boolean SIGNED = true;
     private static final boolean BIG_EDIAN = true;
     private String name;
-    private String filePath;
-    private File wavFile;
+    private final String filePath;
+    private static File wavFile;
+    private Thread stopper;
 
     private final TargetDataLine targetDataLine;
 
-    public void stopRecording()
-    {
+    public File stopRecording() throws InterruptedException {
         targetDataLine.stop();
         targetDataLine.close();
+        stopper.join();
+        System.out.println("Recording Stopped");
+        return wavFile;
     }
     public SoundRecorder(String filePath) throws LineUnavailableException {
         this.filePath = filePath;
@@ -41,35 +44,23 @@ public class SoundRecorder {
 
         this.targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
     }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    public File recordSound() throws LineUnavailableException
+    public void record(String name)
     {
-        return record(targetDataLine);
-    }
-    private File record(TargetDataLine targetDataLine) {
-
-        Platform.runLater(() -> {
-            try {
-                targetDataLine.open();
-            } catch (LineUnavailableException e) {
-                throw new RuntimeException(e);
-            }
+        try {
+            targetDataLine.open();
             targetDataLine.start();
-        });
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("Recording...");
 
-        Thread stopper = new Thread(() -> {
+        stopper = new Thread(() -> {
+            String tmpFilePath = filePath + "/" + name;
             AudioInputStream audioStream = new AudioInputStream(targetDataLine);
-            wavFile = new File(filePath + "/" + name + ".wav");
             try {
+                new File(filePath + "/" + name).mkdirs();
+                wavFile = new File(tmpFilePath + "/" + name + ".wav");
                 AudioSystem.write(audioStream, AudioFileFormat.Type.WAVE, wavFile);
             }
 
@@ -79,14 +70,5 @@ public class SoundRecorder {
         });
 
         stopper.start();
-
-        Platform.runLater(() -> {
-            targetDataLine.stop();
-            targetDataLine.close();
-        });
-
-        System.out.println("End");
-
-        return wavFile;
     }
 }
