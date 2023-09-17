@@ -1,5 +1,6 @@
 package SoundBoardFX;
 
+import Recorder.SoundPlayer;
 import Recorder.SoundRecorder;
 import com.example.soundboardfx.SoundFileManager;
 import com.example.soundboardfx.SoundPack;
@@ -59,13 +60,16 @@ public class SoundController {
     private static Thread progressThread;
     private File currentWavFile;
     private final HashMap<String, Object[]> soundFileMap;
+
+    private String folderPath;
     public SoundController() throws LineUnavailableException {
-        String folderPath = "C://Users//dblac//OneDrive//Desktop//soundTest";
+        folderPath = SoundFileManager.readSoundPackFolderPath("soundPackFolder.txt");
         // Initialize the soundList
         recorder = new SoundRecorder(folderPath);
         soundList = FXCollections.observableArrayList();
         soundFileMap = new HashMap<>();
-
+        addSoundFilesToMap(new File("C://Users//dblac//OneDrive//Desktop//soundTest"));
+        Platform.runLater(() -> soundListView.setItems(soundList));
     }
 
     @FXML
@@ -77,17 +81,13 @@ public class SoundController {
         String date = dateTextBox.getEditor().getText();
         String description = descriptionTextBox.getText();
 
-        if(!author.isEmpty() && !title.isEmpty() && !date.isEmpty() && !description.isEmpty() && currentWavFile != null)
+        if(!author.isEmpty() && !title.isEmpty() && !date.isEmpty() && currentWavFile != null)
         {
             SoundPack soundPack = new SoundPack(author, title, date, description, Paths.get(currentWavFile.getAbsolutePath()).getFileName().toString());
             SoundFileManager.writeSoundPackToFile(soundPack, currentWavFile.getAbsolutePath());
-            soundList.add(title);
-            Platform.runLater(() -> soundListView.setItems(soundList));
             submitButton.setText("✔");
             submitButton.setTextFill(Paint.valueOf("#69da12"));
-
             addSoundFilesToMap(new File("C://Users//dblac//OneDrive//Desktop//soundTest"));
-            soundList.addAll();
         }
 
         else {
@@ -95,12 +95,6 @@ public class SoundController {
             submitButton.setTextFill(Paint.valueOf("#d70000"));
         }
     }
-
-
-    public void onSoundClicked(MouseEvent mouseEvent) {
-        System.out.println("Clicked on " + soundListView.getSelectionModel().getSelectedItem());
-    }
-
     public void onRecordButtonClicked(MouseEvent mouseEvent) {
         recorder.record(titleTextBox.getText());
         stoppedRecording = false;
@@ -140,6 +134,7 @@ public class SoundController {
             folderSubmitButton.setTextFill(Paint.valueOf("#d70000"));
         } else {
             SoundFileManager.saveSoundPackFolderPath("soundPackFolder.txt",folderPathTextField.getText());
+            folderPath = SoundFileManager.readSoundPackFolderPath("");
             folderSubmitButton.setText("✔");
             folderSubmitButton.setTextFill(Paint.valueOf("#69da12"));
         }
@@ -161,26 +156,54 @@ public class SoundController {
     private void addSoundFilesToMap(final File folder) {
         SoundPack newSound = null;
         File tmpWaveFile = null;
+
+        // Check if the folder exists and is a directory.
+        if (!folder.exists() || !folder.isDirectory()) {
+            // Handle the case where the folder doesn't exist or is not a directory.
+            return;
+        }
+
         for (final File fileEntry : Objects.requireNonNull(folder.listFiles())) {
             if (fileEntry.isDirectory()) {
+                // Recursively process subdirectories.
                 addSoundFilesToMap(fileEntry);
-            }
-
-            else {
-                if(fileEntry.getAbsolutePath().contains(".wav.spo"))
-                {
+            } else {
+                if (fileEntry.getAbsolutePath().endsWith(".wav.spo")) {
                     newSound = SoundFileManager.readSoundPackFromFile(fileEntry);
-                }
-
-                else if(fileEntry.getAbsolutePath().contains(".wav") && !fileEntry.getAbsolutePath().contains(".spo"))
-                {
+                } else if (fileEntry.getAbsolutePath().endsWith(".wav") && !fileEntry.getAbsolutePath().endsWith(".spo")) {
                     tmpWaveFile = fileEntry;
                 }
 
-                soundFileMap.put(newSound.title(), new Object[] {newSound, tmpWaveFile});
+                if (newSound != null && tmpWaveFile != null && !soundFileMap.containsKey(newSound.title())) {
+                    soundFileMap.put(newSound.title(), new Object[] { newSound, tmpWaveFile });
+                    soundList.add(newSound.title());
+
+                    // Reset the variables for the next iteration.
+                    newSound = null;
+                    tmpWaveFile = null;
+                }
             }
         }
 
         System.out.println("Refreshed Listing from file system.");
+    }
+
+
+    public void onSoundClicked(MouseEvent mouseEvent)
+    {
+        SoundPlayer player = new SoundPlayer();
+
+        String soundSelected = soundListView.getSelectionModel().getSelectedItem();
+        SoundPack soundPackSelected = (SoundPack) soundFileMap.get(soundSelected)[0];
+        System.out.println("title: " + soundPackSelected.title());
+        System.out.println("author: " + soundPackSelected.author());
+        System.out.println("date: " + soundPackSelected.creationDate());
+        System.out.println("description: " + soundPackSelected.description());
+
+        File wavFileSelected = (File) soundFileMap.get(soundSelected)[1];
+
+        new Thread(() -> {
+            player.play(wavFileSelected);
+        }).start();
     }
 }

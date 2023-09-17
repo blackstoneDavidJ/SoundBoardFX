@@ -11,26 +11,11 @@ import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-
-/**
- * This is an example program that demonstrates how to play back an audio file
- * using the Clip in Java Sound API.
- * @author www.codejava.net
- *
- */
-public class SoundPlayer implements LineListener {
-
-    /**
-     * this flag indicates whether the playback completes or not.
-     */
-    boolean playCompleted;
-
-    /**
-     * Play a given audio file.
-     * @param audioFilePath Path of the audio file.
-     */
-    void play(File soundFile) {
-
+public class SoundPlayer implements LineListener
+{
+    private static boolean playCompleted;
+    public void play(File soundFile)
+    {
         try {
             AudioInputStream audioStream = AudioSystem.getAudioInputStream(soundFile);
             AudioFormat format = audioStream.getFormat();
@@ -64,12 +49,9 @@ public class SoundPlayer implements LineListener {
         }
 
     }
-
-    /**
-     * Listens to the START and STOP events of the audio line.
-     */
     @Override
-    public void update(LineEvent event) {
+    public void update(LineEvent event)
+    {
         LineEvent.Type type = event.getType();
 
         if (type == LineEvent.Type.START) {
@@ -79,10 +61,5 @@ public class SoundPlayer implements LineListener {
             playCompleted = true;
             System.out.println("Playback completed.");
         }
-
-    }
-
-    public static void main(String[] args)
-    {
     }
 }

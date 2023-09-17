@@ -20,6 +20,18 @@ public class SoundFileManager
         }
     }
 
+    public static String readSoundPackFolderPath(String textFilePath) {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(textFilePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
     public static void writeSoundPackToFile(SoundPack obj, String soundFilePath) {
         try {
             FileOutputStream fo = new FileOutputStream(soundFilePath + ".spo");

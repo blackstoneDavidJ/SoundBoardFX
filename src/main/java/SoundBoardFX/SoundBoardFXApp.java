@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class SoundBoardFXApp extends Application {
-
     private static final int SCREEN_WIDTH  = 1280;
     private static final int SCREEN_HEIGHT = 720;
     private static final String PANEL_FILE  = "SoundBoardPanel.fxml";
