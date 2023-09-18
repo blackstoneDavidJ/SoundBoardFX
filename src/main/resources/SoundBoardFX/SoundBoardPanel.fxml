@@ -22,7 +22,7 @@
             </Label>
             <TextField fx:id="creatorTextBox" layoutX="217.0" layoutY="186.0" prefHeight="25.0" prefWidth="205.0" />
             <DatePicker fx:id="dateTextBox" layoutX="217.0" layoutY="246.0" prefHeight="25.0" prefWidth="205.0" />
-            <Label layoutX="218.0" layoutY="158.0" prefHeight="28.0" prefWidth="205.0" text="    Creator">
+            <Label alignment="TOP_LEFT" layoutX="218.0" layoutY="158.0" prefHeight="28.0" prefWidth="205.0" text="    Creator">
                <font>
                   <Font name="Monospaced Regular" size="24.0" />
                </font>
@@ -38,18 +38,18 @@
                   <Font name="Monospaced Regular" size="24.0" />
                </font>
             </Label>
-            <ProgressBar fx:id="recordProgressBar" layoutX="84.0" layoutY="566.0" prefHeight="18.0" prefWidth="471.0" progress="0.0" />
-            <Button fx:id="recordPauseButton" layoutX="281.0" layoutY="453.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="90.0" text="⏸">
+            <ProgressBar fx:id="recordProgressBar" layoutX="84.0" layoutY="566.0" prefHeight="28.0" prefWidth="471.0" progress="0.0" style="-fx-accent: red;" />
+            <Button fx:id="recordPauseButton" layoutX="281.0" layoutY="453.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="90.0" style="-fx-background-color: white;" text="⏸">
                <font>
                   <Font size="33.0" />
                </font>
             </Button>
-            <Button fx:id="recordPlayButton" layoutX="127.0" layoutY="453.0" mnemonicParsing="false" onMouseClicked="#onRecordButtonClicked" prefHeight="46.0" prefWidth="90.0" text="⏺" textFill="#69da12">
+            <Button fx:id="recordPlayButton" layoutX="127.0" layoutY="453.0" mnemonicParsing="false" onMouseClicked="#onRecordButtonClicked" prefHeight="46.0" prefWidth="90.0" style="-fx-background-color: white;" text="⏺" textFill="#69da12">
                <font>
                   <Font size="33.0" />
                </font>
             </Button>
-            <Button fx:id="recordStopButton" layoutX="422.0" layoutY="453.0" mnemonicParsing="false" onAction="#onStopRecordingButton" prefHeight="46.0" prefWidth="90.0" text="⏹" textFill="#d70000">
+            <Button fx:id="recordStopButton" layoutX="422.0" layoutY="453.0" mnemonicParsing="false" onAction="#onStopRecordingButton" prefHeight="46.0" prefWidth="90.0" style="-fx-background-color: white;" text="⏹" textFill="#d70000">
                <font>
                   <Font size="33.0" />
                </font>
@@ -62,15 +62,55 @@
             </Label>
          </Pane>
          <Pane prefHeight="695.0" prefWidth="640.0" style="-fx-background-color: linear-gradient(to bottom left, #FFD700, #FFA500); -fx-border-color: black;">
-            <ListView fx:id="soundListView" layoutX="14.0" layoutY="14.0" onMouseClicked="#onSoundClicked" prefHeight="666.0" prefWidth="337.0" style="-fx-border-color: black; -fx-border-radius: 1;" />
-            <TextField fx:id="folderPathTextField" layoutX="14.0" layoutY="687.0" onMouseClicked="#onFolderTextChange" prefHeight="25.0" prefWidth="220.0" promptText="Sound Packs Folder Directory">
+            <ListView fx:id="soundListView" layoutX="14.0" layoutY="14.0" onMouseClicked="#onSoundClicked" prefHeight="666.0" prefWidth="293.0" style="-fx-border-color: black; -fx-border-radius: 1;" />
+            <TextField fx:id="folderPathTextField" layoutX="14.0" layoutY="687.0" onMouseClicked="#onFolderTextChange" prefHeight="25.0" prefWidth="176.0" promptText="SoundPack Folder">
                <font>
                   <Font name="Monospaced Regular" size="12.0" />
                </font>
             </TextField>
-            <Button fx:id="folderSubmitButton" layoutX="241.0" layoutY="687.0" mnemonicParsing="false" onAction="#onFolderPathSubmit" prefHeight="25.0" prefWidth="110.0" text="Change Folder">
+            <Button fx:id="folderSubmitButton" layoutX="197.0" layoutY="687.0" mnemonicParsing="false" onAction="#onFolderPathSubmit" prefHeight="25.0" prefWidth="110.0" text="Change Folder">
                <font>
                   <Font name="Monospaced Regular" size="12.0" />
+               </font>
+            </Button>
+            <Label fx:id="titleLabel" alignment="CENTER" layoutX="307.0" prefHeight="146.0" prefWidth="337.0" style="-fx-padding: 6; -fx-effect: dropShadow(gaussian, orange, 2,2,2,2);" text="Choose a Sound!" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Monospaced Regular" size="47.0" />
+               </font>
+            </Label>
+            <Label fx:id="creatorLabel" alignment="CENTER" layoutX="373.0" layoutY="196.0" prefHeight="46.0" prefWidth="205.0" style="-fx-padding: 6; -fx-effect: dropShadow(gaussian, orange, 2,2,2,2);" text="N/A" textAlignment="CENTER">
+               <font>
+                  <Font name="Monospaced Regular" size="23.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="349.0" layoutY="168.0" prefHeight="28.0" prefWidth="253.0" text="Creator">
+               <font>
+                  <Font name="Monospaced Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="373.0" layoutY="266.0" prefHeight="28.0" prefWidth="205.0" text="Date">
+               <font>
+                  <Font name="Monospaced Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label alignment="CENTER" layoutX="373.0" layoutY="360.0" prefHeight="28.0" prefWidth="205.0" text="Description">
+               <font>
+                  <Font name="Monospaced Bold" size="24.0" />
+               </font>
+            </Label>
+            <Label fx:id="dateLabel" alignment="CENTER" layoutX="373.0" layoutY="294.0" prefHeight="46.0" prefWidth="205.0" style="-fx-padding: 6; -fx-effect: dropShadow(gaussian, orange, 2,2,2,2);" text="N/A" textAlignment="CENTER">
+               <font>
+                  <Font name="Monospaced Regular" size="23.0" />
+               </font>
+            </Label>
+            <Label fx:id="descriptionLabel" alignment="CENTER" layoutX="373.0" layoutY="387.0" prefHeight="127.0" prefWidth="205.0" style="-fx-padding: 6; -fx-effect: dropShadow(gaussian, orange, 2,2,2,2);" text="N/A" textAlignment="CENTER" wrapText="true">
+               <font>
+                  <Font name="Monospaced Regular" size="23.0" />
+               </font>
+            </Label>
+            <Button fx:id="playSelectedSoundButton" layoutX="373.0" layoutY="520.0" mnemonicParsing="false" onAction="#onPlaySelectedSound" prefHeight="95.0" prefWidth="205.0" style="-fx-background-color: white;" text="▶" textFill="#69da12">
+               <font>
+                  <Font size="44.0" />
                </font>
             </Button>
          </Pane>

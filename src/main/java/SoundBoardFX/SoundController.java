@@ -25,6 +25,16 @@ import java.util.Objects;
 
 public class SoundController {
     @FXML
+    private Label creatorLabel;
+    @FXML
+    private Label dateLabel;
+    @FXML
+    private Label descriptionLabel;
+    @FXML
+    private Label titleLabel;
+    @FXML
+    private Button playSelectedSoundButton;
+    @FXML
     private TextField folderPathTextField;
     @FXML
     private Button folderSubmitButton;
@@ -62,6 +72,8 @@ public class SoundController {
     private final HashMap<String, Object[]> soundFileMap;
 
     private String folderPath;
+    private File wavFileSelected;
+
     public SoundController() throws LineUnavailableException {
         folderPath = SoundFileManager.readSoundPackFolderPath("soundPackFolder.txt");
         // Initialize the soundList
@@ -102,7 +114,7 @@ public class SoundController {
         recordProgressBar.setProgress(progress);
         progressThread = new Thread(() -> {
             while (progress < 1.0 && !stoppedRecording) {
-                progress += 0.01;
+                progress += 0.001;
 
                 // Update the progress bar on the JavaFX Application thread
                 Platform.runLater(() -> {
@@ -112,7 +124,7 @@ public class SoundController {
 
                 try {
                     // Sleep for one second (1000 milliseconds)
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     System.out.println("sleep interupted");
                 }
@@ -145,6 +157,7 @@ public class SoundController {
     {
         folderSubmitButton.setText("Change Folder");
         folderSubmitButton.setTextFill(Paint.valueOf("black"));
+        recordProgressBar.setProgress(0.0);
     }
 
     public void onTitleChanged(MouseEvent mouseEvent)
@@ -191,19 +204,29 @@ public class SoundController {
 
     public void onSoundClicked(MouseEvent mouseEvent)
     {
-        SoundPlayer player = new SoundPlayer();
-
         String soundSelected = soundListView.getSelectionModel().getSelectedItem();
         SoundPack soundPackSelected = (SoundPack) soundFileMap.get(soundSelected)[0];
-        System.out.println("title: " + soundPackSelected.title());
-        System.out.println("author: " + soundPackSelected.author());
-        System.out.println("date: " + soundPackSelected.creationDate());
-        System.out.println("description: " + soundPackSelected.description());
+        wavFileSelected = (File) soundFileMap.get(soundSelected)[1];
 
-        File wavFileSelected = (File) soundFileMap.get(soundSelected)[1];
+        titleLabel.setText(soundPackSelected.title());
+        creatorLabel.setText(soundPackSelected.author());
+        dateLabel.setText(soundPackSelected.creationDate());
+        descriptionLabel.setText(soundPackSelected.description());
+    }
 
-        new Thread(() -> {
-            player.play(wavFileSelected);
-        }).start();
+    public void onPlaySelectedSound(ActionEvent actionEvent)
+    {
+        SoundPlayer player = new SoundPlayer();
+        if(wavFileSelected == null)
+        {
+            playSelectedSoundButton.setText("✘");
+            playSelectedSoundButton.setTextFill(Paint.valueOf("#d70000"));
+        }
+        else {
+            new Thread(() -> {
+                player.play(wavFileSelected);
+            }).start();
+        }
+
     }
 }
