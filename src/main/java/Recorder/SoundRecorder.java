@@ -25,7 +25,7 @@ public class SoundRecorder {
     private static File wavFile;
     private Thread stopper;
 
-    private final TargetDataLine targetDataLine;
+    private TargetDataLine targetDataLine;
 
     public File stopRecording() throws InterruptedException {
         targetDataLine.stop();
@@ -41,8 +41,9 @@ public class SoundRecorder {
         if (!AudioSystem.isLineSupported(info)) {
             System.out.println("Line not supported!");
         }
-
-        this.targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
+        else {
+            this.targetDataLine = (TargetDataLine) AudioSystem.getLine(info);
+        }
     }
     public void record(String name)
     {

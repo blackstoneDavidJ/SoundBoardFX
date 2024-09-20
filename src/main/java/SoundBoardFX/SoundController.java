@@ -80,7 +80,7 @@ public class SoundController {
         recorder = new SoundRecorder(folderPath);
         soundList = FXCollections.observableArrayList();
         soundFileMap = new HashMap<>();
-        addSoundFilesToMap(new File("C://Users//dblac//OneDrive//Desktop//soundTest"));
+        addSoundFilesToMap(new File("C:/Users/daveb/Desktop/SoundBoardTest"));
         Platform.runLater(() -> soundListView.setItems(soundList));
     }
 
@@ -99,7 +99,7 @@ public class SoundController {
             SoundFileManager.writeSoundPackToFile(soundPack, currentWavFile.getAbsolutePath());
             submitButton.setText("✔");
             submitButton.setTextFill(Paint.valueOf("#69da12"));
-            addSoundFilesToMap(new File("C://Users//dblac//OneDrive//Desktop//soundTest"));
+            addSoundFilesToMap(new File("C:/Users/daveb/Desktop/SoundBoardTest"));
         }
 
         else {
@@ -181,7 +181,7 @@ public class SoundController {
                 // Recursively process subdirectories.
                 addSoundFilesToMap(fileEntry);
             } else {
-                if (fileEntry.getAbsolutePath().endsWith(".wav.spo")) {
+                if (fileEntry.getAbsolutePath().endsWith(".spo") ) {
                     newSound = SoundFileManager.readSoundPackFromFile(fileEntry);
                 } else if (fileEntry.getAbsolutePath().endsWith(".wav") && !fileEntry.getAbsolutePath().endsWith(".spo")) {
                     tmpWaveFile = fileEntry;
