@@ -7,6 +7,7 @@ public class SoundFileManager
     public static void saveSoundPackFolderPath(String textFilePath, String filePath) {
         File soundTxtFile = new File(textFilePath);
         FileWriter writer;
+        System.out.println(soundTxtFile.getAbsolutePath());
         try {
             if (soundTxtFile.createNewFile())
                 System.out.println("Sound Pack Folder txt created: " + soundTxtFile.getName());
@@ -28,7 +29,11 @@ public class SoundFileManager
                 content.append(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            /*try {
+                new File(textFilePath).createNewFile();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }*/
         }
         return content.toString();
     }

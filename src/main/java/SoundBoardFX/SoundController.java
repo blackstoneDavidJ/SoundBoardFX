@@ -19,6 +19,9 @@ import javafx.scene.paint.Paint;
 
 import javax.sound.sampled.LineUnavailableException;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Objects;
@@ -64,23 +67,36 @@ public class SoundController {
     private ListView<String> soundListView;
     @FXML
     private ObservableList<String> soundList;
-    private final SoundRecorder recorder;
+    private SoundRecorder recorder;
     private double progress;
     private boolean stoppedRecording;
     private static Thread progressThread;
     private File currentWavFile;
-    private final HashMap<String, Object[]> soundFileMap;
+    private HashMap<String, Object[]> soundFileMap;
 
     private String folderPath;
     private File wavFileSelected;
+    private static final String soundPackFilePath = "soundPackFile.txt";
 
     public SoundController() throws LineUnavailableException {
-        folderPath = SoundFileManager.readSoundPackFolderPath("soundPackFolder.txt");
-        // Initialize the soundList
+        Path path = Path.of(soundPackFilePath);
+        if (!Files.exists(path))
+        {
+            System.out.println("Sound pack file does not exist, let's create one.");
+            try {
+                Files.createFile(path);
+                System.out.println("Success!");
+            } catch (IOException e) {
+                System.out.println("Failed!");
+                throw new RuntimeException(e);
+            }
+        }
+
+        folderPath = SoundFileManager.readSoundPackFolderPath(soundPackFilePath);
         recorder = new SoundRecorder(folderPath);
         soundList = FXCollections.observableArrayList();
         soundFileMap = new HashMap<>();
-        addSoundFilesToMap(new File("C:/Users/daveb/Desktop/SoundBoardTest"));
+        addSoundFilesToMap(new File(folderPath));
         Platform.runLater(() -> soundListView.setItems(soundList));
     }
 
@@ -99,7 +115,7 @@ public class SoundController {
             SoundFileManager.writeSoundPackToFile(soundPack, currentWavFile.getAbsolutePath());
             submitButton.setText("✔");
             submitButton.setTextFill(Paint.valueOf("#69da12"));
-            addSoundFilesToMap(new File("C:/Users/daveb/Desktop/SoundBoardTest"));
+            addSoundFilesToMap(new File(folderPath));
         }
 
         else {
@@ -114,7 +130,7 @@ public class SoundController {
         recordProgressBar.setProgress(progress);
         progressThread = new Thread(() -> {
             while (progress < 1.0 && !stoppedRecording) {
-                progress += 0.001;
+                progress += 0.01;
 
                 // Update the progress bar on the JavaFX Application thread
                 Platform.runLater(() -> {
@@ -126,7 +142,7 @@ public class SoundController {
                     // Sleep for one second (1000 milliseconds)
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    System.out.println("sleep interupted");
+                    System.out.println("sleep interrupted");
                 }
             }
         });
@@ -145,14 +161,28 @@ public class SoundController {
             folderSubmitButton.setText("✘");
             folderSubmitButton.setTextFill(Paint.valueOf("#d70000"));
         } else {
-            SoundFileManager.saveSoundPackFolderPath("soundPackFolder.txt",folderPathTextField.getText());
+            SoundFileManager.saveSoundPackFolderPath(soundPackFilePath,folderPathTextField.getText());
             folderPath = SoundFileManager.readSoundPackFolderPath("");
             folderSubmitButton.setText("✔");
             folderSubmitButton.setTextFill(Paint.valueOf("#69da12"));
+            refreshListView();
         }
 
     }
 
+    private void refreshListView()
+    {
+        folderPath = SoundFileManager.readSoundPackFolderPath(soundPackFilePath);
+        try {
+            recorder = new SoundRecorder(folderPath);
+        } catch (LineUnavailableException e) {
+            throw new RuntimeException(e);
+        }
+        soundList = FXCollections.observableArrayList();
+        soundFileMap = new HashMap<>();
+        addSoundFilesToMap(new File(folderPath));
+        Platform.runLater(() -> soundListView.setItems(soundList));
+    }
     public void onFolderTextChange(MouseEvent actionEvent)
     {
         folderSubmitButton.setText("Change Folder");
