@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -73,12 +74,15 @@ public class SoundController {
     private static Thread progressThread;
     private File currentWavFile;
     private HashMap<String, Object[]> soundFileMap;
-
     private String folderPath;
     private File wavFileSelected;
     private static final String soundPackFilePath = "soundPackFile.txt";
 
-    public SoundController() throws LineUnavailableException {
+    @FXML
+    public void initialize() {
+        dateTextBox.setValue(LocalDate.now());
+    }
+    public SoundController() {
         Path path = Path.of(soundPackFilePath);
         if (!Files.exists(path))
         {
@@ -92,12 +96,7 @@ public class SoundController {
             }
         }
 
-        folderPath = SoundFileManager.readSoundPackFolderPath(soundPackFilePath);
-        recorder = new SoundRecorder(folderPath);
-        soundList = FXCollections.observableArrayList();
-        soundFileMap = new HashMap<>();
-        addSoundFilesToMap(new File(folderPath));
-        Platform.runLater(() -> soundListView.setItems(soundList));
+        refreshListView();
     }
 
     @FXML
@@ -198,7 +197,7 @@ public class SoundController {
 
     private void addSoundFilesToMap(final File folder) {
         SoundPack newSound = null;
-        File tmpWaveFile = null;
+        File tmpWaveFile   = null;
 
         // Check if the folder exists and is a directory.
         if (!folder.exists() || !folder.isDirectory()) {

@@ -9,7 +9,7 @@
       <MenuBar prefWidth="1280.0" />
       <HBox prefHeight="739.0" prefWidth="1280.0">
          <Pane prefHeight="695.0" prefWidth="640.0" style="-fx-background-color: linear-gradient(to bottom right, #FFD700, #FFA500); -fx-border-color: black;">
-            <Button fx:id="submitButton" layoutX="217.0" layoutY="637.0" mnemonicParsing="false" onAction="#submitNewSoundPack" prefHeight="46.0" prefWidth="205.0" style="-fx-font-size: 20; -fx-background-color: white; -fx-font-family: monospace;" text="Submit" />
+            <Button fx:id="submitButton" layoutX="218.0" layoutY="581.0" mnemonicParsing="false" onAction="#submitNewSoundPack" prefHeight="46.0" prefWidth="205.0" style="-fx-font-size: 20; -fx-background-color: white; -fx-font-family: monospace;" text="Submit" />
             <Label fx:id="soundBoardTitleLabel" layoutX="56.0" layoutY="14.0" prefHeight="139.0" prefWidth="401.0" style="-fx-padding: 6; -fx-effect: dropShadow(gaussian, orange, 2,2,2,2);" text="Sound Board" textAlignment="CENTER">
                <font>
                   <Font name="Monospaced Regular" size="58.0" />
@@ -20,42 +20,37 @@
                   <Font size="120.0" />
                </font>
             </Label>
-            <TextField fx:id="creatorTextBox" layoutX="217.0" layoutY="186.0" prefHeight="25.0" prefWidth="205.0" />
-            <DatePicker fx:id="dateTextBox" layoutX="217.0" layoutY="246.0" prefHeight="25.0" prefWidth="205.0" />
-            <Label alignment="TOP_LEFT" layoutX="218.0" layoutY="158.0" prefHeight="28.0" prefWidth="205.0" text="    Creator">
+            <TextField fx:id="creatorTextBox" layoutX="218.0" layoutY="246.0" prefHeight="25.0" prefWidth="205.0" />
+            <DatePicker fx:id="dateTextBox" layoutX="217.0" layoutY="307.0" prefHeight="25.0" prefWidth="205.0" />
+            <Label alignment="TOP_LEFT" layoutX="218.0" layoutY="218.0" prefHeight="28.0" prefWidth="205.0" text="    Creator">
                <font>
                   <Font name="Monospaced Regular" size="24.0" />
                </font>
             </Label>
-            <Label layoutX="217.0" layoutY="218.0" prefHeight="28.0" prefWidth="205.0" text="     Date">
+            <Label layoutX="217.0" layoutY="279.0" prefHeight="28.0" prefWidth="205.0" text="     Date">
                <font>
                   <Font name="Monospaced Regular" size="24.0" />
                </font>
             </Label>
-            <TextField fx:id="titleTextBox" layoutX="218.0" layoutY="305.0" onMouseClicked="#onTitleChanged" prefHeight="25.0" prefWidth="205.0" />
-            <Label layoutX="217.0" layoutY="277.0" prefHeight="28.0" prefWidth="205.0" text="     Title">
+            <TextField fx:id="titleTextBox" layoutX="217.0" layoutY="186.0" onMouseClicked="#onTitleChanged" prefHeight="25.0" prefWidth="205.0" />
+            <Label layoutX="217.0" layoutY="158.0" prefHeight="28.0" prefWidth="205.0" text="     Title">
                <font>
                   <Font name="Monospaced Regular" size="24.0" />
                </font>
             </Label>
-            <ProgressBar fx:id="recordProgressBar" layoutX="218.0" layoutY="572.0" prefHeight="36.0" prefWidth="205.0" progress="0.0" style="-fx-accent: red;" />
-            <Button fx:id="recordPauseButton" layoutX="275.0" layoutY="453.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="90.0" style="-fx-background-color: white;" text="⏸">
+            <ProgressBar fx:id="recordProgressBar" layoutX="218.0" layoutY="527.0" prefHeight="36.0" prefWidth="205.0" progress="0.0" style="-fx-accent: red;" />
+            <Button fx:id="recordPlayButton" layoutX="175.0" layoutY="438.0" mnemonicParsing="false" onMouseClicked="#onRecordButtonClicked" prefHeight="71.0" prefWidth="129.0" style="-fx-background-color: white;" text="⏺" textFill="#69da12">
                <font>
                   <Font size="33.0" />
                </font>
             </Button>
-            <Button fx:id="recordPlayButton" layoutX="127.0" layoutY="453.0" mnemonicParsing="false" onMouseClicked="#onRecordButtonClicked" prefHeight="46.0" prefWidth="90.0" style="-fx-background-color: white;" text="⏺" textFill="#69da12">
+            <Button fx:id="recordStopButton" layoutX="342.0" layoutY="438.0" mnemonicParsing="false" onAction="#onStopRecordingButton" prefHeight="71.0" prefWidth="129.0" style="-fx-background-color: white;" text="⏹" textFill="#d70000">
                <font>
                   <Font size="33.0" />
                </font>
             </Button>
-            <Button fx:id="recordStopButton" layoutX="422.0" layoutY="453.0" mnemonicParsing="false" onAction="#onStopRecordingButton" prefHeight="46.0" prefWidth="90.0" style="-fx-background-color: white;" text="⏹" textFill="#d70000">
-               <font>
-                  <Font size="33.0" />
-               </font>
-            </Button>
-            <TextArea fx:id="descriptionTextBox" layoutX="217.0" layoutY="367.0" prefHeight="46.0" prefWidth="205.0" />
-            <Label layoutX="238.0" layoutY="339.0" prefHeight="17.0" prefWidth="205.0" text="Description">
+            <TextArea fx:id="descriptionTextBox" layoutX="218.0" layoutY="376.0" prefHeight="46.0" prefWidth="205.0" />
+            <Label layoutX="239.0" layoutY="346.0" prefHeight="17.0" prefWidth="205.0" text="Description">
                <font>
                   <Font name="Monospaced Regular" size="24.0" />
                </font>
